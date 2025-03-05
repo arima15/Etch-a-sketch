@@ -7,14 +7,28 @@ function clearGrid() {
     }
 }
 
+function getRandomColor() {
+    return {
+        r: Math.floor(Math.random() * 256),
+        g: Math.floor(Math.random() * 256),
+        b: Math.floor(Math.random() * 256),
+    }
+}
+
 function createGrid(numberOfSquares, sizePerSquare) {
     for (let i = 0; i < numberOfSquares * numberOfSquares; i++) {
         const square = document.createElement('div');
         square.setAttribute('style', `width: ${sizePerSquare}px; height: ${sizePerSquare}px; box-sizing: border-box;`);
         square.style.border = '1px solid';
         square.style.backgroundColor = 'white';
+        square.dataset.darkness = 0;
         square.addEventListener('mouseover', () => {
-            square.style.backgroundColor = square.style.backgroundColor === 'white' ? 'yellow' : 'white';
+            const darkness = parseInt(square.dataset.darkness);
+            if (darkness < 10) {
+                square.dataset.darkness = darkness + 1;
+                const color = getRandomColor();
+                square.style.backgroundColor = `rgb(${color.r - darkness * 25}, ${color.g - darkness * 25}, ${color.b - darkness * 25})`;
+            }
         });
         container.appendChild(square);
     }
